@@ -2,8 +2,7 @@ package com.ctrip.framework.apollo.metaservice.controller;
 
 import com.ctrip.framework.apollo.core.dto.ServiceDTO;
 import com.ctrip.framework.apollo.metaservice.service.DiscoveryService;
-import com.netflix.appinfo.InstanceInfo;
-
+import com.ecwid.consul.v1.health.model.HealthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -23,15 +22,15 @@ public class ServiceController {
 
   @RequestMapping("/meta")
   public List<ServiceDTO> getMetaService() {
-    List<InstanceInfo> instances = discoveryService.getMetaServiceInstances();
-    List<ServiceDTO> result = instances.stream().map(new Function<InstanceInfo, ServiceDTO>() {
+    List<HealthService> instances = discoveryService.getMetaServiceInstances();
+    List<ServiceDTO> result = instances.stream().map(new Function<HealthService, ServiceDTO>() {
 
       @Override
-      public ServiceDTO apply(InstanceInfo instance) {
+      public ServiceDTO apply(HealthService instance) {
         ServiceDTO service = new ServiceDTO();
-        service.setAppName(instance.getAppName());
-        service.setInstanceId(instance.getInstanceId());
-        service.setHomepageUrl(instance.getHomePageUrl());
+        service.setAppName(instance.getService().getService());
+        service.setInstanceId(instance.getService().getId());
+        service.setHomepageUrl("http://" + instance.getService().getAddress() + ":" + instance.getService().getPort() + "/");
         return service;
       }
 
@@ -41,17 +40,18 @@ public class ServiceController {
 
   @RequestMapping("/config")
   public List<ServiceDTO> getConfigService(
-      @RequestParam(value = "appId", defaultValue = "") String appId,
-      @RequestParam(value = "ip", required = false) String clientIp) {
-    List<InstanceInfo> instances = discoveryService.getConfigServiceInstances();
-    List<ServiceDTO> result = instances.stream().map(new Function<InstanceInfo, ServiceDTO>() {
+          @RequestParam(value = "appId", defaultValue = "") String appId,
+          @RequestParam(value = "ip", required = false) String clientIp) {
+
+    List<HealthService> instances = discoveryService.getConfigServiceInstances();
+    List<ServiceDTO> result = instances.stream().map(new Function<HealthService, ServiceDTO>() {
 
       @Override
-      public ServiceDTO apply(InstanceInfo instance) {
+      public ServiceDTO apply(HealthService instance) {
         ServiceDTO service = new ServiceDTO();
-        service.setAppName(instance.getAppName());
-        service.setInstanceId(instance.getInstanceId());
-        service.setHomepageUrl(instance.getHomePageUrl());
+        service.setAppName(instance.getService().getService());
+        service.setInstanceId(instance.getService().getId());
+        service.setHomepageUrl("http://" + instance.getService().getAddress() + ":" + instance.getService().getPort() + "/");
         return service;
       }
 
@@ -61,15 +61,15 @@ public class ServiceController {
 
   @RequestMapping("/admin")
   public List<ServiceDTO> getAdminService() {
-    List<InstanceInfo> instances = discoveryService.getAdminServiceInstances();
-    List<ServiceDTO> result = instances.stream().map(new Function<InstanceInfo, ServiceDTO>() {
+    List<HealthService> instances = discoveryService.getAdminServiceInstances();
+    List<ServiceDTO> result = instances.stream().map(new Function<HealthService, ServiceDTO>() {
 
       @Override
-      public ServiceDTO apply(InstanceInfo instance) {
+      public ServiceDTO apply(HealthService instance) {
         ServiceDTO service = new ServiceDTO();
-        service.setAppName(instance.getAppName());
-        service.setInstanceId(instance.getInstanceId());
-        service.setHomepageUrl(instance.getHomePageUrl());
+        service.setAppName(instance.getService().getService());
+        service.setInstanceId(instance.getService().getId());
+        service.setHomepageUrl("http://" + instance.getService().getAddress() + ":" + instance.getService().getPort() + "/");
         return service;
       }
 

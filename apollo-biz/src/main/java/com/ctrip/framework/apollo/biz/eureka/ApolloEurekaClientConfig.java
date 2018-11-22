@@ -1,3 +1,4 @@
+/*
 package com.ctrip.framework.apollo.biz.eureka;
 
 
@@ -18,9 +19,11 @@ public class ApolloEurekaClientConfig extends EurekaClientConfigBean {
   @Autowired
   private BizConfig bizConfig;
 
-  /**
+  */
+/**
    * Assert only one zone: defaultZone, but multiple environments.
-   */
+   *//*
+
   public List<String> getEurekaServerServiceUrls(String myZone) {
     List<String> urls = bizConfig.eurekaServiceUrls();
     return CollectionUtils.isEmpty(urls) ? super.getEurekaServerServiceUrls(myZone) : urls;
@@ -31,3 +34,4 @@ public class ApolloEurekaClientConfig extends EurekaClientConfigBean {
     return super.equals(o);
   }
 }
+*/
